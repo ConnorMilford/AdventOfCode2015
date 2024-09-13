@@ -4,13 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashSet;
-import java.util.Map;
-import java.util.Arrays;
 import java.util.Set;
-
-
-
-
 
 
 public class Problem3 {
@@ -21,12 +15,11 @@ public class Problem3 {
 
 
     // int to represent north south movement 
-    static int ns;
+    static int santaNs;
+    static int roboNs ;
     //int to represent east west movement
-    static int ew;
-
-
-    //one house to the north (^), south (v), east (>), or west (<).
+    static int santaEw ;
+    static int roboEw ;
 
     public static void main(String[] args) {
         try {
@@ -35,31 +28,17 @@ public class Problem3 {
             //iterate over chars, calculate their nsew pos, and their index, if they dont exist add to map
             
             // add first coord to set 
-            coordSet.add("0x0"); 
-
+            coordSet.add("0x0");    
+            
             for (int i=1; i<lines.length-1; i++) {
-                int c = lines[i]; 
+                Character c = lines[i]; 
                 
-                switch (c) {
-                    case '^':
-                        ns += 1; 
-                        break;
-                    case 'v':
-                        ns-=1;
-                        break;
-                    case '>':
-                        ew += 1;
-                        break;
-                    case '<':
-                        ew -=1;
-                        break;
-                    default:
-                        break;
+                // santas turn
+                if (i%2==0){
+                    calculateDirection(c, true);
+                } else {
+                    calculateDirection(c, false);
                 }
-                
-                String coords = Integer.toString(ns) + Integer.toString(ew);
-                // convert ns, ew to strings such as 1x1
-                coordSet.add(coords);
             }
             System.out.println(coordSet.size());
 
@@ -68,4 +47,45 @@ public class Problem3 {
         }
     }
 
+    // true is santa, false is robo
+    public static void calculateDirection (Character c, boolean turn){
+        if (turn){
+            switch (c) {
+                case '^':
+                    santaNs += 1; 
+                    break;
+                case 'v':
+                    santaNs-=1;
+                    break;
+                case '>':
+                    santaEw += 1;
+                    break;
+                case '<':
+                    santaEw -=1;
+                    break;
+                default:
+                    break;
+            }
+            coordSet.add(santaNs + "x" + santaEw);
+        } else {
+            switch (c) {
+                case '^':
+                    roboNs += 1; 
+                    break;
+                case 'v':
+                    roboNs-=1;
+                    break;
+                case '>':
+                    roboEw += 1;
+                    break;
+                case '<':
+                    roboEw -=1;
+                    break;
+                default:
+                    break;
+            }
+            coordSet.add(roboNs + "x" + roboEw);
+        }
+        
+    }
 }
